@@ -91,7 +91,7 @@ function App() {
       await toggleFavorite(promptId);
       const prompt = prompts.find(p => p.id === promptId);
       const isFavorite = prompt?.isFavorite;
-      showToast(isFavorite ? 'Removed from favorites' : 'Added to favorites');
+      showToast(isFavorite ? 'Added to favorites' : 'Removed from favorites');
     } catch (error) {
       showToast('Failed to update favorite', 'error');
     }

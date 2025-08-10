@@ -145,7 +145,7 @@ export const categoryStorage = {
 // Settings operations
 export const settingsStorage = {
   get: () => storage.get(STORAGE_KEYS.SETTINGS) || {
-    theme: 'light',
+    theme: 'dark',
     defaultCategory: 'general',
     showUsageStats: true,
     enableKeyboardShortcuts: true,
