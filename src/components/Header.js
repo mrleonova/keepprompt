@@ -38,7 +38,7 @@ const Header = ({
         <div className="header-right">
           <button
             onClick={onNewPrompt}
-            className="btn btn-primary"
+            className="btn btn-primary desktop-only"
             title="Create new prompt (Ctrl+N)"
           >
             <Plus size={18} />

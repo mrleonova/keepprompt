@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import Header from './components/Header';
 import PromptList from './components/PromptList';
 import PromptForm from './components/PromptForm';
+import FloatingActionButton from './components/FloatingActionButton';
 import { usePrompts } from './hooks/usePrompts';
 import { useCategories } from './hooks/useCategories';
 import { useSettings } from './hooks/useSettings';
@@ -201,6 +202,12 @@ function App() {
           showUsageStats={settings?.showUsageStats}
         />
       </main>
+
+      {/* Mobile Floating Action Button */}
+      <FloatingActionButton 
+        onClick={handleNewPrompt}
+        disabled={isLoading}
+      />
 
       <PromptForm
         prompt={editingPrompt}

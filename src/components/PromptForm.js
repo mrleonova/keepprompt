@@ -133,7 +133,10 @@ const PromptForm = ({
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className={`modal-content ${isOpen ? 'open' : ''}`} 
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="modal-header">
           <h2>{prompt ? 'Edit Prompt' : 'New Prompt'}</h2>
           <button onClick={onClose} className="btn-close" aria-label="Close">

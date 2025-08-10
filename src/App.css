@@ -1,12 +1,18 @@
+/* Mobile-First App Layout */
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  background: var(--bg-primary);
+  position: relative;
 }
 
 .app-main {
   flex: 1;
   padding-top: 0;
+  padding-bottom: var(--spacing-2xl); /* Space for FAB */
+  position: relative;
 }
 
 .app-loading {
@@ -57,41 +63,40 @@
   }
 }
 
+/* Mobile-First App Footer */
 .app-footer {
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
-  padding: 1rem 0;
-  margin-top: 2rem;
+  padding: var(--spacing-md) 0;
+  margin-top: var(--spacing-xl);
 }
 
 .app-footer p {
   margin: 0;
   text-align: center;
   color: var(--text-tertiary);
-  font-size: 0.875rem;
+  font-size: var(--font-size-xs);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  flex-direction: column;
 }
 
 .shortcut-hint {
   color: var(--text-secondary);
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
+  font-size: var(--font-size-xs);
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
+/* Desktop footer layout */
+@media (min-width: 768px) {
   .app-footer p {
-    flex-direction: column;
-    gap: 0.25rem;
-    text-align: center;
+    flex-direction: row;
+    font-size: var(--font-size-sm);
   }
   
   .shortcut-hint {
-    margin-left: 0;
-    font-size: 0.75rem;
+    margin-left: var(--spacing-sm);
+    font-size: var(--font-size-xs);
   }
 }

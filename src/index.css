@@ -1,4 +1,4 @@
-/* Global CSS Variables and Styles for KeepPrompt */
+/* Mobile-First Global CSS Variables and Styles for KeepPrompt */
 
 :root {
   /* Light theme colors */
@@ -25,7 +25,7 @@
   --warning-color-light: #fef3c7;
   
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
+  --bg-secondary: #f8f9fa;
   --bg-tertiary: #f1f5f9;
   --bg-overlay: rgba(0, 0, 0, 0.6);
   
@@ -37,29 +37,58 @@
   --border-color: #e2e8f0;
   --border-light: #f1f5f9;
   
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
+  /* Mobile-First Spacing (16px base for mobile) */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px - mobile base */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
   
-  /* Border radius */
+  /* Mobile-First Touch Targets (44px minimum) */
+  --touch-target-min: 44px;
+  --touch-target-medium: 48px;
+  --touch-target-large: 56px;
+  
+  /* Mobile-First Border radius */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
+  --radius-xxl: 20px;
   
-  /* Shadows */
+  /* Mobile-Optimized Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-fab: 0 4px 16px rgba(0, 123, 255, 0.3);
   
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.2s ease;
-  --transition-slow: 0.3s ease;
+  /* Mobile-Optimized Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0.0, 0.2, 1);
+  --transition-normal: 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  --transition-slow: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  --transition-bounce: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Mobile Typography Scale */
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-base: 1rem;    /* 16px - mobile optimized */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-2xl: 1.5rem;   /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  
+  /* Mobile Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.4;  /* Mobile optimized */
+  --line-height-relaxed: 1.6;
+  
+  /* Z-index scale */
+  --z-dropdown: 1000;
+  --z-modal: 1100;
+  --z-fab: 1200;
+  --z-toast: 1300;
 }
 
 /* Dark theme colors */
@@ -86,14 +115,16 @@
   --error-color-alpha: rgba(239, 68, 68, 0.3);
 }
 
-/* Global reset and base styles */
+/* Mobile-First Global reset and base styles */
 * {
   box-sizing: border-box;
 }
 
 html {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 16px; /* Mobile-first base size */
+  line-height: var(--line-height-normal);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -107,12 +138,19 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color var(--transition-normal), color var(--transition-normal);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  /* Mobile scroll optimization */
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* Scrollbar styling */
@@ -140,7 +178,19 @@ html {
   scrollbar-color: var(--border-color) var(--bg-secondary);
 }
 
-/* Focus styles */
+/* Mobile-first Touch and Interaction Styles */
+
+/* Touch target optimization */
+button, 
+[role="button"],
+input[type="button"],
+input[type="submit"],
+a {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+/* Focus styles optimized for mobile */
 *:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
@@ -149,9 +199,17 @@ html {
 button:focus,
 input:focus,
 textarea:focus,
-select:focus {
+select:focus,
+[role="button"]:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users */
+@media (pointer: fine) {
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 /* Selection styles */
@@ -160,30 +218,43 @@ select:focus {
   color: var(--primary-color-dark);
 }
 
-/* Typography */
+/* Mobile-First Typography */
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: var(--line-height-tight);
   color: var(--text-primary);
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.75rem; }
-h4 { font-size: 1.5rem; }
-h5 { font-size: 1.25rem; }
-h6 { font-size: 1rem; }
+/* Mobile-first heading sizes */
+h1 { font-size: var(--font-size-2xl); }
+h2 { font-size: var(--font-size-xl); }
+h3 { font-size: var(--font-size-lg); }
+h4 { font-size: var(--font-size-base); }
+h5 { font-size: var(--font-size-sm); }
+h6 { font-size: var(--font-size-xs); }
+
+/* Tablet and up heading sizes */
+@media (min-width: 768px) {
+  h1 { font-size: var(--font-size-3xl); }
+  h2 { font-size: var(--font-size-2xl); }
+  h3 { font-size: var(--font-size-xl); }
+  h4 { font-size: var(--font-size-lg); }
+  h5 { font-size: var(--font-size-base); }
+  h6 { font-size: var(--font-size-sm); }
+}
 
 p {
-  margin: 0 0 1rem 0;
+  margin: 0 0 var(--spacing-md) 0;
   color: var(--text-primary);
+  line-height: var(--line-height-normal);
 }
 
 a {
   color: var(--primary-color);
   text-decoration: none;
   transition: color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
 }
 
 a:hover {
@@ -247,19 +318,30 @@ a:hover {
 .animate-slideUp { animation: slideUp 0.3s ease-out; }
 .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 
-/* Toast/notification styles */
+/* Mobile-Optimized Toast/notification styles */
 .toast {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: var(--spacing-md);
+  left: var(--spacing-md);
+  right: var(--spacing-md);
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 1rem;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
   box-shadow: var(--shadow-lg);
-  z-index: 1100;
-  animation: slideUp 0.3s ease-out;
-  max-width: 400px;
+  z-index: var(--z-toast);
+  animation: slideUp var(--transition-slow);
+  max-width: none;
+}
+
+/* Desktop toast positioning */
+@media (min-width: 768px) {
+  .toast {
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    left: auto;
+    max-width: 400px;
+  }
 }
 
 .toast.success {
@@ -274,11 +356,18 @@ a:hover {
   color: var(--error-color-dark);
 }
 
-/* Layout utilities */
+/* Mobile-First Layout utilities */
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 var(--spacing-md);
+}
+
+/* Desktop container padding */
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
 }
 
 .flex { display: flex; }
@@ -292,28 +381,49 @@ a:hover {
 .justify-start { justify-content: flex-start; }
 .justify-end { justify-content: flex-end; }
 
-.gap-1 { gap: 0.25rem; }
-.gap-2 { gap: 0.5rem; }
+.gap-1 { gap: var(--spacing-xs); }
+.gap-2 { gap: var(--spacing-sm); }
 .gap-3 { gap: 0.75rem; }
-.gap-4 { gap: 1rem; }
-.gap-6 { gap: 1.5rem; }
-.gap-8 { gap: 2rem; }
+.gap-4 { gap: var(--spacing-md); }
+.gap-6 { gap: var(--spacing-lg); }
+.gap-8 { gap: var(--spacing-xl); }
 
-/* Responsive utilities */
-@media (max-width: 768px) {
+/* Mobile-specific utilities */
+.mobile-only { display: block; }
+.desktop-only { display: none; }
+
+@media (min-width: 768px) {
+  .mobile-only { display: none; }
+  .desktop-only { display: block; }
+}
+
+/* Touch-friendly button base class */
+.btn-touch {
+  min-height: var(--touch-target-min);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.btn-touch:active {
+  transform: scale(0.98);
+}
+
+/* Mobile-specific responsive utilities */
+@media (max-width: 767px) {
   .container {
-    padding: 0 0.75rem;
+    padding: 0 var(--spacing-md);
   }
   
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.75rem; }
-  h3 { font-size: 1.5rem; }
-  
-  .toast {
-    top: 0.5rem;
-    right: 0.5rem;
-    left: 0.5rem;
-    max-width: none;
+  /* Ensure readable text on small screens */
+  body {
+    font-size: var(--font-size-base);
   }
 }
 

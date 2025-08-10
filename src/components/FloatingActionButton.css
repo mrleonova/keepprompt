@@ -1,0 +1,97 @@
+/* Floating Action Button (FAB) - Mobile-First */
+.fab {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  width: var(--touch-target-large);
+  height: var(--touch-target-large);
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: var(--shadow-fab);
+  z-index: var(--z-fab);
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fab:hover:not(:disabled) {
+  background: var(--primary-color-hover);
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.fab:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.fab:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Focus styles for accessibility */
+.fab:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* Animation for entrance */
+.fab {
+  animation: fabEnter var(--transition-bounce);
+}
+
+@keyframes fabEnter {
+  0% {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Hide FAB on larger screens where header button is used */
+@media (min-width: 768px) {
+  .fab {
+    display: none;
+  }
+}
+
+/* Adjust position for very small screens */
+@media (max-width: 375px) {
+  .fab {
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+  }
+}
+
+/* Safe area support for devices with notches */
+@supports (bottom: env(safe-area-inset-bottom)) {
+  .fab {
+    bottom: calc(var(--spacing-lg) + env(safe-area-inset-bottom));
+  }
+  
+  @media (max-width: 375px) {
+    .fab {
+      bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .fab {
+  box-shadow: var(--shadow-fab), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .fab:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
