@@ -40,16 +40,16 @@
   font-size: var(--text-xl); /* 20px on mobile */
 }
 
-/* Mobile-first search container */
+/* Mobile-first search container - limit width */
 .header-center {
   flex: 1;
   min-width: 0; /* Allow flex shrinking */
+  max-width: 200px; /* Limit width on small mobile */
 }
 
 .search-container {
   position: relative;
   width: 100%;
-  max-width: 280px; /* Constrain mobile search width */
 }
 
 .search-icon {
@@ -170,8 +170,8 @@
 
 /* Progressive enhancement for iPhone standard size */
 @media (min-width: 375px) {
-  .search-container {
-    max-width: 300px;
+  .header-center {
+    max-width: 240px;
   }
   
   .logo {
@@ -189,8 +189,8 @@
 
 /* Progressive enhancement for iPhone Plus */
 @media (min-width: 414px) {
-  .search-container {
-    max-width: 320px;
+  .header-center {
+    max-width: 280px;
   }
   
   .btn-primary .btn-text {
@@ -215,7 +215,7 @@
     font-size: var(--text-3xl); /* 30px */
   }
   
-  .search-container {
+  .header-center {
     max-width: 400px;
   }
   
@@ -259,7 +259,7 @@
     font-size: 1.75rem; /* 28px */
   }
   
-  .search-container {
+  .header-center {
     max-width: 500px; /* Full desktop width */
   }
   
