@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Plus, Settings, Moon, Sun, Download, Upload } from 'lucide-react';
+import { Search, Plus, Settings, Download, Upload } from 'lucide-react';
 import './Header.css';
 
 const Header = ({

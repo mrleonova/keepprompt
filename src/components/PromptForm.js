@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Sparkles, Tag } from 'lucide-react';
-import { validatePrompt, generateTemplate } from '../utils/helpers';
+import { X, Save } from 'lucide-react';
+import { validatePrompt } from '../utils/helpers';
 import './PromptForm.css';
 
 const PromptForm = ({ 
@@ -12,12 +12,8 @@ const PromptForm = ({
 }) => {
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
-    content: '',
-    tags: [],
-    isFavorite: false
+    content: ''
   });
-  const [tagInput, setTagInput] = useState('');
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,28 +22,21 @@ const PromptForm = ({
     if (prompt) {
       setFormData({
         title: prompt.title || '',
-        description: prompt.description || '',
-        content: prompt.content || '',
-        tags: prompt.tags || [],
-        isFavorite: prompt.isFavorite || false
+        content: prompt.content || ''
       });
     } else {
       setFormData({
         title: '',
-        description: '',
-        content: '',
-        tags: [],
-        isFavorite: false
+        content: ''
       });
     }
     setErrors({});
-    setTagInput('');
   }, [prompt, isOpen]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
-    [field]: field === 'category' ? 'general' : value
+      [field]: value
     }));
     
     // Clear field-specific error when user starts typing
@@ -57,45 +46,6 @@ const PromptForm = ({
         [field]: null
       }));
     }
-  };
-
-  const handleTagAdd = (tag) => {
-    const trimmedTag = tag.trim().toLowerCase();
-    if (trimmedTag && !formData.tags.includes(trimmedTag)) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...prev.tags, trimmedTag]
-      }));
-    }
-    setTagInput('');
-  };
-
-  const handleTagRemove = (tagToRemove) => {
-    setFormData(prev => ({
-      ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
-    }));
-  };
-
-  const handleTagInputKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      if (tagInput.trim()) {
-        handleTagAdd(tagInput);
-      }
-    }
-    if (e.key === 'Backspace' && !tagInput && formData.tags.length > 0) {
-      handleTagRemove(formData.tags[formData.tags.length - 1]);
-    }
-  };
-
-  const loadTemplate = (templateType) => {
-    const template = generateTemplate(templateType);
-    setFormData(prev => ({
-      ...prev,
-      ...template,
-      tags: [...prev.tags, ...template.tags]
-    }));
   };
 
   const handleSubmit = async (e) => {
