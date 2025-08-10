@@ -13,8 +13,6 @@ const PromptList = ({
   onDeletePrompt, 
   onToggleFavorite, 
   onUsePrompt,
-  viewMode = 'grid',
-  onViewModeChange,
   showUsageStats = true,
   loading = false 
 }) => {
@@ -68,7 +66,7 @@ const PromptList = ({
           <p>No prompts found.</p>
         </div>
       ) : (
-        <div className={`prompts-grid ${viewMode}`}>
+        <div className="prompts-grid grid">
           {prompts.map(prompt => (
             <PromptCard
               key={prompt.id}

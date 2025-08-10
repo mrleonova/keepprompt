@@ -71,29 +71,17 @@ export const truncateText = (text, maxLength = 100) => {
 };
 
 // Search/filter prompts
-export const searchPrompts = (prompts, searchTerm, categoryFilter = null) => {
+export const searchPrompts = (prompts, searchTerm) => {
   if (!prompts || prompts.length === 0) return [];
   
   let filtered = [...prompts];
-  
-  // Filter by category
-  if (categoryFilter && categoryFilter !== 'all') {
-    filtered = filtered.filter(prompt => 
-      prompt.category === categoryFilter || 
-      (prompt.tags && prompt.tags.includes(categoryFilter))
-    );
-  }
   
   // Search by term
   if (searchTerm && searchTerm.trim()) {
     const term = searchTerm.toLowerCase().trim();
     filtered = filtered.filter(prompt => 
       prompt.title.toLowerCase().includes(term) ||
-      prompt.description.toLowerCase().includes(term) ||
-      prompt.content.toLowerCase().includes(term) ||
-      (prompt.tags && prompt.tags.some(tag => 
-        tag.toLowerCase().includes(term)
-      ))
+      prompt.content.toLowerCase().includes(term)
     );
   }
   
@@ -164,53 +152,6 @@ export const validatePrompt = (prompt) => {
     isValid: errors.length === 0,
     errors
   };
-};
-
-// Generate prompt templates
-export const generateTemplate = (type) => {
-  const templates = {
-    basic: {
-      title: 'New Prompt',
-      description: 'A basic prompt template',
-      content: 'Please help me with...',
-      category: 'general',
-      tags: []
-    },
-    
-    codeReview: {
-      title: 'Code Review',
-      description: 'Template for code review requests',
-      content: 'Please review this code and provide feedback on:\n- Code quality and best practices\n- Potential bugs or issues\n- Performance improvements\n- Readability and maintainability\n\n```\n[paste your code here]\n```',
-      category: 'coding',
-      tags: ['code-review', 'programming']
-    },
-    
-    writing: {
-      title: 'Writing Assistant',
-      description: 'Template for writing assistance',
-      content: 'Please help me improve this text by:\n- Correcting grammar and spelling\n- Improving clarity and flow\n- Enhancing tone and style\n- Suggesting better word choices\n\n[paste your text here]',
-      category: 'writing',
-      tags: ['writing', 'editing', 'grammar']
-    },
-    
-    analysis: {
-      title: 'Data Analysis',
-      description: 'Template for data analysis requests',
-      content: 'Please analyze this data and provide:\n- Key insights and patterns\n- Statistical summary\n- Trends and anomalies\n- Recommendations based on findings\n\n[paste your data here]',
-      category: 'analysis',
-      tags: ['data', 'analysis', 'insights']
-    },
-    
-    creative: {
-      title: 'Creative Writing',
-      description: 'Template for creative writing prompts',
-      content: 'Write a creative piece about:\n- Setting: [describe the setting]\n- Character: [describe main character]\n- Conflict: [describe the main conflict]\n- Style: [specify writing style or genre]\n\nAdditional requirements:\n[add any specific requirements]',
-      category: 'creative',
-      tags: ['creative', 'writing', 'story']
-    }
-  };
-  
-  return templates[type] || templates.basic;
 };
 
 // Export data as file

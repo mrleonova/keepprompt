@@ -3,7 +3,6 @@ import Header from './components/Header';
 import PromptList from './components/PromptList';
 import PromptForm from './components/PromptForm';
 import { usePrompts } from './hooks/usePrompts';
-import { useCategories } from './hooks/useCategories';
 import { useSettings } from './hooks/useSettings';
 import { useSearch } from './hooks/useSearch';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -14,30 +13,26 @@ import './App.css';
 function App() {
   // State management
   const { prompts, loading: promptsLoading, addPrompt, updatePrompt, deletePrompt, toggleFavorite, incrementUsage } = usePrompts();
-  const { categories, loading: categoriesLoading } = useCategories();
   const { settings, toggleTheme } = useSettings();
   
   // Local state
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState(null);
-  const [viewMode, setViewMode] = useState('grid');
   const [toast, setToast] = useState(null);
   
   // Search and filtering
   const { 
     searchTerm, 
-    categoryFilter, 
     sortBy, 
     sortOrder, 
     filteredPrompts,
     updateSearchTerm,
-    updateCategoryFilter,
     updateSort,
     toggleSortOrder
   } = useSearch(prompts);
 
   // Memoized values
-  const isLoading = promptsLoading || categoriesLoading;
+  const isLoading = promptsLoading;
   
   // Toast helper
   const showToast = useCallback((message, type = 'success') => {
@@ -183,26 +178,20 @@ function App() {
       <main className="app-main">
         <PromptList
           prompts={filteredPrompts}
-          categories={categories}
-          categoryFilter={categoryFilter}
           sortBy={sortBy}
           sortOrder={sortOrder}
-          onCategoryFilterChange={updateCategoryFilter}
           onSortChange={updateSort}
           onToggleSortOrder={toggleSortOrder}
           onEditPrompt={handleEditPrompt}
           onDeletePrompt={handleDeletePrompt}
           onToggleFavorite={handleToggleFavorite}
           onUsePrompt={handleUsePrompt}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
           showUsageStats={settings?.showUsageStats}
         />
       </main>
 
       <PromptForm
         prompt={editingPrompt}
-        categories={categories}
         isOpen={isFormOpen}
         onClose={handleCloseForm}
         onSave={handleSavePrompt}
@@ -216,12 +205,7 @@ function App() {
 
       <footer className="app-footer no-print">
         <div className="container">
-          <p>
-            KeepPrompt - Your AI Prompt Library • 
-            <span className="shortcut-hint">
-              Press Ctrl+N for new prompt, Ctrl+T for theme toggle
-            </span>
-          </p>
+          <p>KeepPrompt</p>
         </div>
       </footer>
     </div>

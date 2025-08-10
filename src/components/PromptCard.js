@@ -5,14 +5,13 @@ import './PromptCard.css';
 
 const PromptCard = ({ 
   prompt, 
-  categories = [], 
   onEdit, 
   onDelete, 
   onToggleFavorite, 
   onUse,
   showUsageStats = true 
 }) => {
-  const category = categories.find(c => c.id === prompt.category) || { name: 'General', color: '#6b7280' };
+  const category = { name: 'General', color: '#6b7280' };
 
   const handleCopy = async () => {
     const success = await copyToClipboard(prompt.content);
