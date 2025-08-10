@@ -35,6 +35,7 @@
   justify-content: space-between;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid var(--border-color);
+  gap: 1rem;
 }
 
 .modal-header h2 {
@@ -42,6 +43,37 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auto-save-status {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.auto-save-status.saving {
+  color: var(--primary-color);
+  background: var(--primary-color-light);
+}
+
+.auto-save-status.saved {
+  color: var(--success-color);
+  background: var(--success-color-light);
+}
+
+.auto-save-status.error {
+  color: var(--error-color);
+  background: var(--error-color-light);
 }
 
 .btn-close {
@@ -134,10 +166,37 @@
 }
 
 .char-count {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 0.75rem;
   color: var(--text-tertiary);
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.char-count .separator {
+  margin: 0 0.125rem;
+}
+
+.char-count .warning {
+  color: var(--warning-color);
+  font-weight: 600;
+}
+
+.char-count .danger {
+  color: var(--error-color);
+  font-weight: 600;
+}
+
+.char-count .words {
+  margin-left: auto;
+  color: var(--text-secondary);
+}
+
+.content-count {
+  justify-content: flex-end;
+  gap: 0.25rem;
 }
 
 .tags-container {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save } from 'lucide-react';
 import { validatePrompt } from '../utils/helpers';
+import { useDebounce } from '../hooks/useDebounce';
 import './PromptForm.css';
 
 const PromptForm = ({ 
@@ -8,7 +9,8 @@ const PromptForm = ({
   isOpen, 
   onClose, 
   onSave,
-  onAddCategory 
+  onAddCategory,
+  enableAutoSave = true
 }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -20,7 +22,24 @@ const PromptForm = ({
   // const [tagInput, setTagInput] = useState('');
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const [autoSaveStatus, setAutoSaveStatus] = useState(''); // 'saving', 'saved', 'error'
 
+  // Auto-save functionality
+  const [debouncedAutoSave] = useDebounce(async (data) => {
+    if (prompt && isDirty && enableAutoSave) {
+      try {
+        setAutoSaveStatus('saving');
+        await onSave(data);
+        setAutoSaveStatus('saved');
+        setIsDirty(false);
+        setTimeout(() => setAutoSaveStatus(''), 2000);
+      } catch (error) {
+        setAutoSaveStatus('error');
+        setTimeout(() => setAutoSaveStatus(''), 3000);
+      }
+    }
+  }, 2000);
   // Initialize form data when prompt changes or form opens
   useEffect(() => {
     if (prompt) {
@@ -42,13 +61,18 @@ const PromptForm = ({
     }
     setErrors({});
     // setTagInput('');
+    setIsDirty(false);
+    setAutoSaveStatus('');
   }, [prompt, isOpen]);
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-    [field]: field === 'category' ? 'general' : value
-    }));
+    const newData = {
+      ...formData,
+      [field]: field === 'category' ? 'general' : value
+    };
+    
+    setFormData(newData);
+    setIsDirty(true);
     
     // Clear field-specific error when user starts typing
     if (errors[field]) {
@@ -56,6 +80,11 @@ const PromptForm = ({
         ...prev,
         [field]: null
       }));
+    }
+
+    // Trigger auto-save for existing prompts
+    if (prompt && enableAutoSave) {
+      debouncedAutoSave(newData);
     }
   };
 
@@ -135,6 +164,17 @@ const PromptForm = ({
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{prompt ? 'Edit Prompt' : 'New Prompt'}</h2>
+          <div className="header-status">
+            {autoSaveStatus === 'saving' && (
+              <span className="auto-save-status saving">Saving...</span>
+            )}
+            {autoSaveStatus === 'saved' && (
+              <span className="auto-save-status saved">Saved</span>
+            )}
+            {autoSaveStatus === 'error' && (
+              <span className="auto-save-status error">Save failed</span>
+            )}
+          </div>
           <button onClick={onClose} className="btn-close" aria-label="Close">
             <X size={20} />
           </button>
@@ -165,6 +205,13 @@ const PromptForm = ({
               {errors.title && (
                 <div className="error-message">{errors.title}</div>
               )}
+              <div className="char-count">
+                <span className={formData.title.length > 80 ? 'warning' : ''}>
+                  {formData.title.length}
+                </span>
+                <span className="separator">/</span>
+                <span>100</span>
+              </div>
             </div>
           </div>
 
@@ -187,8 +234,13 @@ const PromptForm = ({
             {errors.content && (
               <div className="error-message">{errors.content}</div>
             )}
-            <div className="char-count">
-              {formData.content.length} / 10,000 characters
+            <div className="char-count content-count">
+              <span className={formData.content.length > 8000 ? 'warning' : formData.content.length > 9000 ? 'danger' : ''}>
+                {formData.content.length}
+              </span>
+              <span className="separator">/</span>
+              <span>10,000</span>
+              <span className="words">• {formData.content.trim().split(/\s+/).filter(Boolean).length} words</span>
             </div>
           </div>
 

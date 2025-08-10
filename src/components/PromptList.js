@@ -1,6 +1,7 @@
 import React from 'react';
 import { SortAsc, SortDesc } from 'lucide-react';
 import PromptCard from './PromptCard';
+import EmptyState from './EmptyState';
 import './PromptList.css';
 
 const PromptList = ({ 
@@ -13,10 +14,12 @@ const PromptList = ({
   onDeletePrompt, 
   onToggleFavorite, 
   onUsePrompt,
+  onNewPrompt,
   viewMode = 'grid',
   onViewModeChange,
   showUsageStats = true,
-  loading = false 
+  loading = false,
+  searchTerm = ''
 }) => {
   if (loading) {
     return (
@@ -62,11 +65,11 @@ const PromptList = ({
       </div>
 
       {prompts.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">📝</div>
-          <h3>No prompts found</h3>
-          <p>No prompts found.</p>
-        </div>
+        <EmptyState 
+          type="prompts"
+          onNewPrompt={onNewPrompt}
+          searchTerm={searchTerm}
+        />
       ) : (
         <div className={`prompts-grid ${viewMode}`}>
           {prompts.map(prompt => (

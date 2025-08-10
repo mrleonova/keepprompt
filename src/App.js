@@ -2,11 +2,13 @@ import React, { useState, useMemo, useCallback } from 'react';
 import Header from './components/Header';
 import PromptList from './components/PromptList';
 import PromptForm from './components/PromptForm';
+import ToastContainer from './components/ToastContainer';
 import { usePrompts } from './hooks/usePrompts';
 import { useCategories } from './hooks/useCategories';
 import { useSettings } from './hooks/useSettings';
 import { useSearch } from './hooks/useSearch';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { useToast } from './hooks/useToast';
 import { downloadData } from './utils/helpers';
 import { dataManager } from './utils/storage';
 import './App.css';
@@ -21,7 +23,9 @@ function App() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState(null);
   const [viewMode, setViewMode] = useState('grid');
-  const [toast, setToast] = useState(null);
+  
+  // Enhanced toast system
+  const { toasts, success, error, info, removeToast } = useToast();
   
   // Search and filtering
   const { 
@@ -38,12 +42,6 @@ function App() {
 
   // Memoized values
   const isLoading = promptsLoading || categoriesLoading;
-  
-  // Toast helper
-  const showToast = useCallback((message, type = 'success') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  }, []);
 
   // Handler functions
   const handleNewPrompt = useCallback(() => {
@@ -60,18 +58,18 @@ function App() {
     try {
       if (editingPrompt) {
         await updatePrompt(editingPrompt.id, promptData);
-        showToast('Prompt updated successfully!');
+        success('Prompt updated successfully!');
       } else {
         await addPrompt(promptData);
-        showToast('Prompt created successfully!');
+        success('Prompt created successfully!');
       }
       setIsFormOpen(false);
       setEditingPrompt(null);
     } catch (error) {
-      showToast('Failed to save prompt', 'error');
+      error('Failed to save prompt');
       throw error;
     }
-  }, [editingPrompt, updatePrompt, addPrompt, showToast]);
+  }, [editingPrompt, updatePrompt, addPrompt, success]);
 
   const handleDeletePrompt = useCallback(async (promptId) => {
     if (settings?.confirmDelete && !window.confirm('Are you sure you want to delete this prompt?')) {
@@ -80,31 +78,31 @@ function App() {
     
     try {
       await deletePrompt(promptId);
-      showToast('Prompt deleted successfully!');
-    } catch (error) {
-      showToast('Failed to delete prompt', 'error');
+      success('Prompt deleted successfully!');
+    } catch (err) {
+      error('Failed to delete prompt');
     }
-  }, [deletePrompt, settings?.confirmDelete, showToast]);
+  }, [deletePrompt, settings?.confirmDelete, success, error]);
 
   const handleToggleFavorite = useCallback(async (promptId) => {
     try {
       await toggleFavorite(promptId);
       const prompt = prompts.find(p => p.id === promptId);
       const isFavorite = prompt?.isFavorite;
-      showToast(isFavorite ? 'Removed from favorites' : 'Added to favorites');
-    } catch (error) {
-      showToast('Failed to update favorite', 'error');
+      info(isFavorite ? 'Removed from favorites' : 'Added to favorites');
+    } catch (err) {
+      error('Failed to update favorite');
     }
-  }, [toggleFavorite, prompts, showToast]);
+  }, [toggleFavorite, prompts, info, error]);
 
   const handleUsePrompt = useCallback(async (promptId) => {
     try {
       incrementUsage(promptId);
-      showToast('Copied to clipboard!');
-    } catch (error) {
-      showToast('Failed to copy prompt', 'error');
+      success('Copied to clipboard!', 2000);
+    } catch (err) {
+      error('Failed to copy prompt');
     }
-  }, [incrementUsage, showToast]);
+  }, [incrementUsage, success, error]);
 
   const handleExport = useCallback(() => {
     try {
@@ -113,14 +111,14 @@ function App() {
       const filename = `keepprompt-backup-${timestamp}.json`;
       
       if (downloadData(data, filename)) {
-        showToast('Data exported successfully!');
+        success('Data exported successfully!');
       } else {
-        showToast('Failed to export data', 'error');
+        error('Failed to export data');
       }
-    } catch (error) {
-      showToast('Failed to export data', 'error');
+    } catch (err) {
+      error('Failed to export data');
     }
-  }, [showToast]);
+  }, [success, error]);
 
   const handleImport = useCallback(async (event) => {
     const file = event.target.files[0];
@@ -130,17 +128,17 @@ function App() {
       const text = await file.text();
       
       if (dataManager.import(text)) {
-        showToast('Data imported successfully! Please refresh the page.');
+        success('Data imported successfully! Please refresh the page.');
       } else {
-        showToast('Failed to import data - invalid format', 'error');
+        error('Failed to import data - invalid format');
       }
-    } catch (error) {
-      showToast('Failed to import data', 'error');
+    } catch (err) {
+      error('Failed to import data');
     }
     
     // Reset file input
     event.target.value = '';
-  }, [showToast]);
+  }, [success, error]);
 
   const handleCloseForm = useCallback(() => {
     setIsFormOpen(false);
@@ -152,8 +150,24 @@ function App() {
     'ctrl+n': handleNewPrompt,
     'ctrl+t': toggleTheme,
     'escape': () => isFormOpen && handleCloseForm(),
-    'ctrl+f': () => document.querySelector('.search-input')?.focus(),
+    'ctrl+k': () => {
+      const searchInput = document.querySelector('.search-input');
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.select();
+      }
+    },
+    'ctrl+f': () => {
+      const searchInput = document.querySelector('.search-input');
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.select();
+      }
+    },
     'ctrl+e': handleExport,
+    // Single key shortcuts (when not typing)
+    'new': handleNewPrompt,
+    'search': () => document.querySelector('.search-input')?.focus(),
   }), [handleNewPrompt, toggleTheme, isFormOpen, handleCloseForm, handleExport]);
 
   useKeyboardShortcuts(settings?.enableKeyboardShortcuts ? shortcuts : {});
@@ -194,9 +208,11 @@ function App() {
           onDeletePrompt={handleDeletePrompt}
           onToggleFavorite={handleToggleFavorite}
           onUsePrompt={handleUsePrompt}
+          onNewPrompt={handleNewPrompt}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
           showUsageStats={settings?.showUsageStats}
+          searchTerm={searchTerm}
         />
       </main>
 
@@ -208,11 +224,8 @@ function App() {
         onSave={handleSavePrompt}
       />
 
-      {toast && (
-        <div className={`toast ${toast.type} animate-slideUp`}>
-          {toast.message}
-        </div>
-      )}
+      {/* Enhanced Toast System */}
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
 
       <footer className="app-footer no-print">
         <div className="container">
