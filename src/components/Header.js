@@ -6,11 +6,11 @@ const Header = ({
   searchTerm,
   onSearchChange,
   onNewPrompt,
-  onToggleTheme,
+  // ...existing code...
   onExport,
   onImport,
   onOpenSettings,
-  theme = 'light'
+  // ...existing code...
 }) => {
   return (
     <header className="header">
@@ -64,13 +64,7 @@ const Header = ({
               />
             </label>
 
-            <button
-              onClick={onToggleTheme}
-              className="btn btn-ghost"
-              title="Toggle theme (Ctrl+T)"
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            {/* Theme toggle removed: always dark mode */}
 
             <button
               onClick={onOpenSettings}

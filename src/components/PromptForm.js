@@ -5,7 +5,6 @@ import './PromptForm.css';
 
 const PromptForm = ({ 
   prompt = null, 
-  categories = [], 
   isOpen, 
   onClose, 
   onSave,
@@ -15,7 +14,6 @@ const PromptForm = ({
     title: '',
     description: '',
     content: '',
-    category: 'general',
     tags: [],
     isFavorite: false
   });
@@ -30,7 +28,6 @@ const PromptForm = ({
         title: prompt.title || '',
         description: prompt.description || '',
         content: prompt.content || '',
-        category: prompt.category || 'general',
         tags: prompt.tags || [],
         isFavorite: prompt.isFavorite || false
       });
@@ -39,7 +36,6 @@ const PromptForm = ({
         title: '',
         description: '',
         content: '',
-        category: 'general',
         tags: [],
         isFavorite: false
       });
@@ -51,7 +47,7 @@ const PromptForm = ({
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
-      [field]: value
+    [field]: field === 'category' ? 'general' : value
     }));
     
     // Clear field-specific error when user starts typing
@@ -167,43 +163,9 @@ const PromptForm = ({
                 <div className="error-message">{errors.title}</div>
               )}
             </div>
-
-            <div className="form-group">
-              <label htmlFor="category" className="form-label">
-                Category
-              </label>
-              <select
-                id="category"
-                value={formData.category}
-                onChange={(e) => handleInputChange('category', e.target.value)}
-                className="form-select"
-              >
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="description" className="form-label">
-              Description
-            </label>
-            <textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) => handleInputChange('description', e.target.value)}
-              className={`form-textarea ${errors.description ? 'error' : ''}`}
-              placeholder="Brief description of what this prompt does..."
-              maxLength={300}
-              rows={2}
-            />
-            {errors.description && (
-              <div className="error-message">{errors.description}</div>
-            )}
-          </div>
+          {/* Description removed */}
 
           <div className="form-group">
             <label htmlFor="content" className="form-label">
@@ -227,85 +189,11 @@ const PromptForm = ({
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">
-              <Tag size={16} />
-              Tags
-            </label>
-            <div className="tags-container">
-              <div className="tags-list">
-                {formData.tags.map((tag, index) => (
-                  <span key={index} className="tag-item">
-                    {tag}
-                    <button
-                      type="button"
-                      onClick={() => handleTagRemove(tag)}
-                      className="tag-remove"
-                      aria-label={`Remove ${tag} tag`}
-                    >
-                      <X size={12} />
-                    </button>
-                  </span>
-                ))}
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagInputKeyDown}
-                  className="tag-input"
-                  placeholder="Add tags..."
-                />
-              </div>
-            </div>
-          </div>
+          {/* Tags removed */}
 
-          <div className="template-section">
-            <label className="form-label">
-              <Sparkles size={16} />
-              Quick Templates
-            </label>
-            <div className="template-buttons">
-              <button
-                type="button"
-                onClick={() => loadTemplate('codeReview')}
-                className="btn-template"
-              >
-                Code Review
-              </button>
-              <button
-                type="button"
-                onClick={() => loadTemplate('writing')}
-                className="btn-template"
-              >
-                Writing
-              </button>
-              <button
-                type="button"
-                onClick={() => loadTemplate('analysis')}
-                className="btn-template"
-              >
-                Analysis
-              </button>
-              <button
-                type="button"
-                onClick={() => loadTemplate('creative')}
-                className="btn-template"
-              >
-                Creative
-              </button>
-            </div>
-          </div>
+          {/* Quick Templates removed */}
 
-          <div className="form-group">
-            <label className="checkbox-container">
-              <input
-                type="checkbox"
-                checked={formData.isFavorite}
-                onChange={(e) => handleInputChange('isFavorite', e.target.checked)}
-              />
-              <span className="checkbox-label">Add to favorites</span>
-            </label>
-          </div>
+          {/* Favorite checkbox removed */}
 
           <div className="form-actions">
             <button

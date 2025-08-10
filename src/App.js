@@ -176,10 +176,8 @@ function App() {
         searchTerm={searchTerm}
         onSearchChange={updateSearchTerm}
         onNewPrompt={handleNewPrompt}
-        onToggleTheme={toggleTheme}
         onExport={handleExport}
         onImport={handleImport}
-        theme={settings?.theme}
       />
 
       <main className="app-main">

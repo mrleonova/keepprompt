@@ -1,3 +1,17 @@
+/* Category filter styles removed */
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-group,
+.sort-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .prompt-list-container {
   padding: 1.5rem;
   max-width: 1200px;
@@ -203,43 +217,52 @@
 @media (max-width: 768px) {
   .prompt-list-container {
     padding: 1rem;
+  gap: 1rem;
   }
   
   .list-header {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
+  font-size: 1.1rem;
   }
   
   .list-controls {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
+  font-size: 1rem;
   }
   
   .filter-section {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
+  font-size: 0.95rem;
   }
   
   .filter-group,
   .sort-group {
     justify-content: space-between;
+  gap: 0.5rem;
   }
   
   .filter-select,
   .sort-select {
     flex: 1;
     min-width: 0;
+  font-size: 1rem;
+  min-height: 40px;
   }
   
   .prompts-grid.grid {
     grid-template-columns: 1fr;
+  gap: 1rem;
   }
   
   .results-info {
     justify-content: center;
+  font-size: 0.95rem;
   }
 }
 

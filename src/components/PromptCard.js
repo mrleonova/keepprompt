@@ -56,7 +56,7 @@ const PromptCard = ({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onToggleFavorite(prompt.id);
+      // const category = categories.find(c => c.id === prompt.category) || { name: 'General', color: '#6b7280' };
             }}
             className={`btn-action ${prompt.isFavorite ? 'favorited' : ''}`}
             title={prompt.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
@@ -138,15 +138,7 @@ const PromptCard = ({
             </div>
           )}
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCopy();
-            }}
-            className="btn-copy"
-            title="Copy to clipboard"
-            aria-label="Copy to clipboard"
-          >
+          <button>
             <Copy size={14} />
           </button>
         </div>

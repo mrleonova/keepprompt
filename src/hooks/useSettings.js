@@ -12,30 +12,14 @@ export const useSettings = () => {
     setLoading(false);
     
     // Apply theme to document
-    document.documentElement.setAttribute('data-theme', storedSettings.theme);
+  document.documentElement.setAttribute('data-theme', 'dark');
   }, []);
 
-  const updateSettings = (updates) => {
-    const newSettings = settingsStorage.update(updates);
-    setSettings(newSettings);
-    
-    // Apply theme changes immediately
-    if (updates.theme) {
-      document.documentElement.setAttribute('data-theme', updates.theme);
-    }
-    
-    return newSettings;
-  };
-
-  const toggleTheme = () => {
-    const newTheme = settings.theme === 'light' ? 'dark' : 'light';
-    return updateSettings({ theme: newTheme });
-  };
-
+  // Only dark mode supported
   return {
-    settings,
+    settings: { ...settings, theme: 'dark' },
     loading,
-    updateSettings,
-    toggleTheme
+    updateSettings: () => {},
+    toggleTheme: () => {},
   };
 };

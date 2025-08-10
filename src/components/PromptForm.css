@@ -339,14 +339,18 @@
   .modal-content {
     max-height: 95vh;
     max-width: 600px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
   
   .modal-header {
     padding: 1rem 1.5rem;
+  font-size: 1.1rem;
   }
   
   .prompt-form {
     padding: 1.5rem;
+  gap: 1.25rem;
   }
   
   .form-row {
@@ -357,11 +361,13 @@
   .form-actions {
     flex-direction: column-reverse;
     gap: 0.75rem;
+  padding-bottom: 0.5rem;
   }
   
   .btn {
     width: 100%;
     min-height: 44px; /* Improved touch target */
+  font-size: 1rem;
   }
   
   .template-buttons {
@@ -373,29 +379,36 @@
     width: 100%;
     min-height: 44px; /* Improved touch target */
     padding: 0.75rem 1rem;
+  font-size: 0.95rem;
   }
   
   /* Enhanced close button for mobile */
   .btn-close {
     width: 40px;
     height: 40px; /* Improved touch target */
+  min-width: 44px;
+  min-height: 44px;
   }
   
   /* Better tag management for mobile */
   .tag-item {
     padding: 0.5rem 0.75rem;
     font-size: 0.85rem;
+  border-radius: 8px;
   }
   
   .tag-remove {
     width: 20px;
     height: 20px; /* Improved touch target */
+  min-width: 24px;
+  min-height: 24px;
   }
   
   /* Better checkbox for touch */
   .checkbox-container input[type="checkbox"] {
     width: 20px;
     height: 20px;
+  accent-color: #007bff;
   }
 }
 
