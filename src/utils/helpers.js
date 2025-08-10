@@ -71,29 +71,17 @@ export const truncateText = (text, maxLength = 100) => {
 };
 
 // Search/filter prompts
-export const searchPrompts = (prompts, searchTerm, categoryFilter = null) => {
+export const searchPrompts = (prompts, searchTerm) => {
   if (!prompts || prompts.length === 0) return [];
   
   let filtered = [...prompts];
-  
-  // Filter by category
-  if (categoryFilter && categoryFilter !== 'all') {
-    filtered = filtered.filter(prompt => 
-      prompt.category === categoryFilter || 
-      (prompt.tags && prompt.tags.includes(categoryFilter))
-    );
-  }
   
   // Search by term
   if (searchTerm && searchTerm.trim()) {
     const term = searchTerm.toLowerCase().trim();
     filtered = filtered.filter(prompt => 
       prompt.title.toLowerCase().includes(term) ||
-      prompt.description.toLowerCase().includes(term) ||
-      prompt.content.toLowerCase().includes(term) ||
-      (prompt.tags && prompt.tags.some(tag => 
-        tag.toLowerCase().includes(term)
-      ))
+      (prompt.description && prompt.description.toLowerCase().includes(term))
     );
   }
   
@@ -150,14 +138,8 @@ export const validatePrompt = (prompt) => {
     errors.push('Title must be less than 100 characters');
   }
   
-  if (!prompt.content || prompt.content.trim().length === 0) {
-    errors.push('Content is required');
-  } else if (prompt.content.trim().length > 10000) {
-    errors.push('Content must be less than 10,000 characters');
-  }
-  
-  if (prompt.description && prompt.description.length > 300) {
-    errors.push('Description must be less than 300 characters');
+  if (prompt.description && prompt.description.length > 1000) {
+    errors.push('Description must be less than 1,000 characters');
   }
   
   return {

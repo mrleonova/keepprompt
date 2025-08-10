@@ -1,15 +1,12 @@
 import React from 'react';
-import { Filter, SortAsc, SortDesc, Grid, List } from 'lucide-react';
+import { SortAsc, SortDesc, Grid, List } from 'lucide-react';
 import PromptCard from './PromptCard';
 import './PromptList.css';
 
 const PromptList = ({ 
   prompts = [], 
-  categories = [], 
-  categoryFilter, 
   sortBy, 
   sortOrder, 
-  onCategoryFilterChange, 
   onSortChange,
   onToggleSortOrder,
   onEditPrompt, 
@@ -45,23 +42,6 @@ const PromptList = ({
       <div className="list-header">
         <div className="list-controls">
           <div className="filter-section">
-            <div className="filter-group">
-              <Filter size={16} />
-              <select
-                value={categoryFilter}
-                onChange={(e) => onCategoryFilterChange(e.target.value)}
-                className="filter-select"
-                aria-label="Filter by category"
-              >
-                <option value="all">All Categories</option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             <div className="sort-group">
               <select
                 value={sortBy}
@@ -119,10 +99,7 @@ const PromptList = ({
           <div className="empty-icon">📝</div>
           <h3>No prompts found</h3>
           <p>
-            {categoryFilter !== 'all' || sortBy !== 'updatedAt'
-              ? 'Try adjusting your filters or search terms.'
-              : 'Create your first prompt to get started!'
-            }
+            Create your first prompt to get started!
           </p>
         </div>
       ) : (
@@ -131,7 +108,6 @@ const PromptList = ({
             <PromptCard
               key={prompt.id}
               prompt={prompt}
-              categories={categories}
               onEdit={onEditPrompt}
               onDelete={onDeletePrompt}
               onToggleFavorite={onToggleFavorite}

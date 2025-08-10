@@ -1,21 +1,18 @@
 import React from 'react';
-import { Edit, Trash2, Copy, Heart, Tag, Clock, TrendingUp } from 'lucide-react';
+import { Edit, Trash2, Copy, Clock, TrendingUp } from 'lucide-react';
 import { formatDate, truncateText, copyToClipboard } from '../utils/helpers';
 import './PromptCard.css';
 
 const PromptCard = ({ 
   prompt, 
-  categories = [], 
   onEdit, 
   onDelete, 
   onToggleFavorite, 
   onUse,
   showUsageStats = true 
 }) => {
-  const category = categories.find(c => c.id === prompt.category) || { name: 'General', color: '#6b7280' };
-
   const handleCopy = async () => {
-    const success = await copyToClipboard(prompt.content);
+    const success = await copyToClipboard(prompt.description || prompt.title);
     if (success && onUse) {
       onUse(prompt.id);
     }
@@ -31,7 +28,7 @@ const PromptCard = ({
 
   return (
     <div 
-      className={`prompt-card ${prompt.isFavorite ? 'favorite' : ''}`}
+      className="prompt-card"
       onClick={handleCardClick}
       role="button"
       tabIndex={0}
@@ -47,24 +44,9 @@ const PromptCard = ({
           <h3 className="card-title" title={prompt.title}>
             {truncateText(prompt.title, 60)}
           </h3>
-          {prompt.isFavorite && (
-            <Heart className="favorite-icon filled" size={16} />
-          )}
         </div>
 
         <div className="card-actions">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleFavorite(prompt.id);
-            }}
-            className={`btn-action ${prompt.isFavorite ? 'favorited' : ''}`}
-            title={prompt.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-            aria-label={prompt.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-          >
-            <Heart size={16} />
-          </button>
-
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -98,33 +80,12 @@ const PromptCard = ({
       )}
 
       <div className="card-content" title="Click to copy">
-        <p>{truncateText(prompt.content, 200)}</p>
+        {prompt.description && (
+          <p>{truncateText(prompt.description, 200)}</p>
+        )}
       </div>
 
       <div className="card-footer">
-        <div className="card-meta">
-          <div 
-            className="card-category"
-            style={{ '--category-color': category.color }}
-          >
-            <Tag size={14} />
-            <span>{category.name}</span>
-          </div>
-
-          {prompt.tags && prompt.tags.length > 0 && (
-            <div className="card-tags">
-              {prompt.tags.slice(0, 3).map((tag, index) => (
-                <span key={index} className="tag">
-                  {tag}
-                </span>
-              ))}
-              {prompt.tags.length > 3 && (
-                <span className="tag more">+{prompt.tags.length - 3}</span>
-              )}
-            </div>
-          )}
-        </div>
-
         <div className="card-stats">
           <div className="stat" title={`Created: ${formatDate(prompt.createdAt)}`}>
             <Clock size={12} />

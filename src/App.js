@@ -3,7 +3,6 @@ import Header from './components/Header';
 import PromptList from './components/PromptList';
 import PromptForm from './components/PromptForm';
 import { usePrompts } from './hooks/usePrompts';
-import { useCategories } from './hooks/useCategories';
 import { useSettings } from './hooks/useSettings';
 import { useSearch } from './hooks/useSearch';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -13,8 +12,7 @@ import './App.css';
 
 function App() {
   // State management
-  const { prompts, loading: promptsLoading, addPrompt, updatePrompt, deletePrompt, toggleFavorite, incrementUsage } = usePrompts();
-  const { categories, loading: categoriesLoading } = useCategories();
+  const { prompts, loading: promptsLoading, addPrompt, updatePrompt, deletePrompt, incrementUsage } = usePrompts();
   const { settings, toggleTheme } = useSettings();
   
   // Local state
@@ -26,18 +24,16 @@ function App() {
   // Search and filtering
   const { 
     searchTerm, 
-    categoryFilter, 
     sortBy, 
     sortOrder, 
     filteredPrompts,
     updateSearchTerm,
-    updateCategoryFilter,
     updateSort,
     toggleSortOrder
   } = useSearch(prompts);
 
   // Memoized values
-  const isLoading = promptsLoading || categoriesLoading;
+  const isLoading = promptsLoading;
   
   // Toast helper
   const showToast = useCallback((message, type = 'success') => {
@@ -87,15 +83,8 @@ function App() {
   }, [deletePrompt, settings?.confirmDelete, showToast]);
 
   const handleToggleFavorite = useCallback(async (promptId) => {
-    try {
-      await toggleFavorite(promptId);
-      const prompt = prompts.find(p => p.id === promptId);
-      const isFavorite = prompt?.isFavorite;
-      showToast(isFavorite ? 'Removed from favorites' : 'Added to favorites');
-    } catch (error) {
-      showToast('Failed to update favorite', 'error');
-    }
-  }, [toggleFavorite, prompts, showToast]);
+    // Functionality removed for simplification
+  }, []);
 
   const handleUsePrompt = useCallback(async (promptId) => {
     try {
@@ -185,11 +174,8 @@ function App() {
       <main className="app-main">
         <PromptList
           prompts={filteredPrompts}
-          categories={categories}
-          categoryFilter={categoryFilter}
           sortBy={sortBy}
           sortOrder={sortOrder}
-          onCategoryFilterChange={updateCategoryFilter}
           onSortChange={updateSort}
           onToggleSortOrder={toggleSortOrder}
           onEditPrompt={handleEditPrompt}
@@ -204,7 +190,6 @@ function App() {
 
       <PromptForm
         prompt={editingPrompt}
-        categories={categories}
         isOpen={isFormOpen}
         onClose={handleCloseForm}
         onSave={handleSavePrompt}
