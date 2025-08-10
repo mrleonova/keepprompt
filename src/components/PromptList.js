@@ -2,6 +2,7 @@ import React from 'react';
 import { SortAsc, SortDesc } from 'lucide-react';
 import PromptCard from './PromptCard';
 import EmptyState from './EmptyState';
+import SkeletonLoader from './SkeletonLoader';
 import './PromptList.css';
 
 const PromptList = ({ 
@@ -24,10 +25,11 @@ const PromptList = ({
   if (loading) {
     return (
       <div className="prompt-list-container">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading prompts...</p>
-        </div>
+        <SkeletonLoader 
+          variant="card" 
+          count={6} 
+          className={`${viewMode === 'grid' ? 'grid' : 'list'}`}
+        />
       </div>
     );
   }

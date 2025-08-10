@@ -160,29 +160,45 @@ const PromptForm = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div 
+      className="modal-overlay" 
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
+    >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{prompt ? 'Edit Prompt' : 'New Prompt'}</h2>
-          <div className="header-status">
+          <h2 id="modal-title">{prompt ? 'Edit Prompt' : 'New Prompt'}</h2>
+          <div className="header-status" aria-live="polite" aria-atomic="true">
             {autoSaveStatus === 'saving' && (
-              <span className="auto-save-status saving">Saving...</span>
+              <span className="auto-save-status saving" role="status">Saving...</span>
             )}
             {autoSaveStatus === 'saved' && (
-              <span className="auto-save-status saved">Saved</span>
+              <span className="auto-save-status saved" role="status">Saved</span>
             )}
             {autoSaveStatus === 'error' && (
-              <span className="auto-save-status error">Save failed</span>
+              <span className="auto-save-status error" role="alert">Save failed</span>
             )}
           </div>
-          <button onClick={onClose} className="btn-close" aria-label="Close">
-            <X size={20} />
+          <button 
+            onClick={onClose} 
+            className="btn-close" 
+            aria-label="Close modal"
+            title="Close (Escape)"
+          >
+            <X size={20} aria-hidden="true" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="prompt-form">
+        <form onSubmit={handleSubmit} className="prompt-form" noValidate>
+          <div id="modal-description" className="sr-only">
+            {prompt ? 'Edit your existing prompt details' : 'Create a new AI prompt by filling out the form below'}
+          </div>
+
           {errors.general && (
-            <div className="error-message general">
+            <div className="error-message general" role="alert" aria-live="assertive">
               {errors.general}
             </div>
           )}
@@ -201,11 +217,15 @@ const PromptForm = ({
                 placeholder="Enter prompt title..."
                 maxLength={100}
                 required
+                aria-invalid={errors.title ? 'true' : 'false'}
+                aria-describedby={errors.title ? 'title-error' : 'title-count'}
               />
               {errors.title && (
-                <div className="error-message">{errors.title}</div>
+                <div id="title-error" className="error-message" role="alert" aria-live="polite">
+                  {errors.title}
+                </div>
               )}
-              <div className="char-count">
+              <div id="title-count" className="char-count" aria-live="polite">
                 <span className={formData.title.length > 80 ? 'warning' : ''}>
                   {formData.title.length}
                 </span>
@@ -214,8 +234,6 @@ const PromptForm = ({
               </div>
             </div>
           </div>
-
-          {/* Description removed */}
 
           <div className="form-group">
             <label htmlFor="content" className="form-label">
@@ -230,11 +248,15 @@ const PromptForm = ({
               maxLength={10000}
               rows={8}
               required
+              aria-invalid={errors.content ? 'true' : 'false'}
+              aria-describedby={errors.content ? 'content-error' : 'content-count'}
             />
             {errors.content && (
-              <div className="error-message">{errors.content}</div>
+              <div id="content-error" className="error-message" role="alert" aria-live="polite">
+                {errors.content}
+              </div>
             )}
-            <div className="char-count content-count">
+            <div id="content-count" className="char-count content-count" aria-live="polite">
               <span className={formData.content.length > 8000 ? 'warning' : formData.content.length > 9000 ? 'danger' : ''}>
                 {formData.content.length}
               </span>
@@ -244,29 +266,30 @@ const PromptForm = ({
             </div>
           </div>
 
-          {/* Tags removed */}
-
-          {/* Quick Templates removed */}
-
-          {/* Favorite checkbox removed */}
-
-          <div className="form-actions">
+          <div className="form-actions" role="group" aria-label="Form actions">
             <button
               type="button"
               onClick={onClose}
               className="btn btn-secondary"
               disabled={isLoading}
+              aria-describedby="cancel-help"
             >
               Cancel
             </button>
+            <div id="cancel-help" className="sr-only">Cancel and close the form without saving</div>
+            
             <button
               type="submit"
               className="btn btn-primary"
               disabled={isLoading}
+              aria-describedby="save-help"
             >
-              <Save size={16} />
+              <Save size={16} aria-hidden="true" />
               {isLoading ? 'Saving...' : prompt ? 'Update Prompt' : 'Save Prompt'}
             </button>
+            <div id="save-help" className="sr-only">
+              {isLoading ? 'Saving prompt...' : 'Save the prompt and close the form'}
+            </div>
           </div>
         </form>
       </div>
