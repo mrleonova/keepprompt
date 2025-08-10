@@ -57,20 +57,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  min-width: var(--touch-target-sm);
+  min-height: var(--touch-target-sm);
   border: 1px solid var(--border-color);
   background: var(--bg-secondary);
   color: var(--text-secondary);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
 }
 
 .btn-sort-order:hover {
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border-color: var(--primary-color-light);
+}
+
+.btn-sort-order:active {
+  transform: scale(0.95);
+  opacity: 0.8;
 }
 
 .view-controls {
@@ -86,18 +91,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  min-width: var(--touch-target-sm);
+  min-height: var(--touch-target-sm);
   border: none;
   background: transparent;
   color: var(--text-secondary);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
 }
 
 .btn-view:hover {
   color: var(--text-primary);
+}
+
+.btn-view:active {
+  transform: scale(0.95);
+  opacity: 0.7;
 }
 
 .btn-view.active {
@@ -199,43 +209,128 @@
   margin: 0;
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
+/* Mobile responsive improvements */
+@media (max-width: 320px) {
   .prompt-list-container {
-    padding: 1rem;
+    padding: var(--mobile-spacing-xs);
   }
   
   .list-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
+    gap: var(--mobile-spacing-sm);
   }
   
   .list-controls {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
+    gap: var(--mobile-spacing-sm);
   }
   
   .filter-section {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.75rem;
+    gap: var(--mobile-spacing-xs);
   }
   
   .filter-group,
   .sort-group {
     justify-content: space-between;
+    align-items: center;
   }
   
   .filter-select,
   .sort-select {
     flex: 1;
     min-width: 0;
+    height: var(--touch-target-min);
+    font-size: 1rem;
+  }
+  
+  .btn-sort-order {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .view-controls {
+    align-self: center;
+    padding: 3px;
+  }
+  
+  .btn-view {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
   }
   
   .prompts-grid.grid {
     grid-template-columns: 1fr;
+    gap: var(--mobile-spacing-sm);
+  }
+  
+  .results-info {
+    justify-content: center;
+  }
+  
+  .results-count {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 414px) {
+  .prompt-list-container {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .list-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--mobile-spacing-md);
+  }
+  
+  .list-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--mobile-spacing-md);
+  }
+  
+  .filter-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--mobile-spacing-sm);
+  }
+  
+  .filter-group,
+  .sort-group {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .filter-select,
+  .sort-select {
+    flex: 1;
+    min-width: 0;
+    height: var(--touch-target-min);
+    font-size: 1rem; /* Prevent zoom on iOS */
+  }
+  
+  .btn-sort-order {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .view-controls {
+    align-self: center;
+    padding: 4px;
+  }
+  
+  .btn-view {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .prompts-grid.grid {
+    grid-template-columns: 1fr;
+    gap: var(--mobile-spacing-md);
   }
   
   .results-info {
@@ -243,9 +338,21 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 375px) {
+  .prompt-list-container {
+    padding: var(--mobile-spacing-sm);
+  }
+  
+  .list-header {
+    gap: var(--mobile-spacing-sm);
+  }
+  
+  .list-controls {
+    gap: var(--mobile-spacing-sm);
+  }
+  
   .empty-state {
-    padding: 2rem 1rem;
+    padding: var(--mobile-spacing-xl) var(--mobile-spacing-md);
   }
   
   .empty-icon {
@@ -258,5 +365,26 @@
   
   .empty-state p {
     font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 415px) and (max-width: 768px) {
+  .prompt-list-container {
+    padding: var(--mobile-spacing-lg);
+  }
+  
+  .list-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .filter-section {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .prompts-grid.grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }

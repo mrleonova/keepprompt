@@ -45,14 +45,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  min-width: var(--touch-target-sm);
+  min-height: var(--touch-target-sm);
   border: none;
   background: transparent;
   color: var(--text-tertiary);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
 }
 
 .btn-close:hover {
@@ -89,14 +89,15 @@
 .form-select,
 .form-textarea {
   width: 100%;
-  padding: 0.75rem;
+  padding: var(--spacing-sm);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--bg-secondary);
   color: var(--text-primary);
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
+  font-size: 1rem; /* Prevent zoom on iOS */
+  transition: all var(--transition-normal);
   font-family: inherit;
+  min-height: var(--touch-target-min);
 }
 
 .form-textarea {
@@ -109,6 +110,8 @@
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   font-size: 0.9rem;
   min-height: 200px;
+  line-height: 1.6;
+  resize: vertical;
 }
 
 .form-input:focus,
@@ -261,16 +264,17 @@
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
   min-width: 120px;
+  min-height: var(--touch-target-min);
   justify-content: center;
 }
 
@@ -292,6 +296,10 @@
   transform: translateY(-1px);
 }
 
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
 .btn-secondary {
   background: transparent;
   color: var(--text-secondary);
@@ -302,6 +310,22 @@
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border-color: var(--text-tertiary);
+}
+
+.btn-secondary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  /* Touch-specific styles for mobile devices */
+  .btn:active:not(:disabled) {
+    opacity: 0.8;
+  }
+  
+  .btn-template:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
 }
 
 .error-message {
@@ -323,45 +347,212 @@
   font-weight: 500;
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
+/* Mobile responsive improvements */
+@media (max-width: 320px) {
   .modal-overlay {
-    padding: 0.5rem;
+    padding: var(--mobile-spacing-xs);
+    align-items: flex-start;
+    padding-top: var(--mobile-spacing-sm);
   }
   
   .modal-content {
-    max-height: 95vh;
+    max-height: calc(100vh - var(--mobile-spacing-md));
+    border-radius: var(--radius-md);
   }
   
   .modal-header {
-    padding: 1rem 1.5rem;
+    padding: var(--mobile-spacing-sm) var(--mobile-spacing-md);
+  }
+  
+  .modal-header h2 {
+    font-size: 1.125rem;
+  }
+  
+  .btn-close {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
   }
   
   .prompt-form {
-    padding: 1.5rem;
+    padding: var(--mobile-spacing-md);
   }
   
   .form-row {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--mobile-spacing-sm);
+  }
+  
+  .form-group {
+    margin-bottom: var(--mobile-spacing-sm);
+  }
+  
+  .form-label {
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .form-textarea.content {
+    min-height: 100px;
+    font-size: 0.875rem;
   }
   
   .form-actions {
     flex-direction: column-reverse;
-    gap: 0.75rem;
+    gap: var(--mobile-spacing-xs);
+    margin-top: var(--mobile-spacing-md);
+    padding-top: var(--mobile-spacing-md);
   }
   
   .btn {
     width: 100%;
+    min-height: var(--touch-target-lg);
+    font-size: 0.9rem;
   }
   
   .template-buttons {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--mobile-spacing-xs);
   }
   
   .btn-template {
     width: 100%;
+    min-height: var(--touch-target-sm);
+    font-size: 0.85rem;
+  }
+  
+  .tags-list {
+    padding: var(--mobile-spacing-xs);
+    min-height: var(--touch-target-sm);
+  }
+  
+  .tag-input {
+    font-size: 0.9rem;
+    min-height: var(--touch-target-xs);
+  }
+  
+  .char-count {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 414px) {
+  .modal-overlay {
+    padding: var(--mobile-spacing-sm);
+    align-items: flex-start;
+    padding-top: var(--mobile-spacing-md);
+  }
+  
+  .modal-content {
+    max-height: calc(100vh - var(--mobile-spacing-xl));
+    border-radius: var(--radius-lg);
+  }
+  
+  .modal-header {
+    padding: var(--mobile-spacing-md) var(--mobile-spacing-lg);
+  }
+  
+  .modal-header h2 {
+    font-size: 1.25rem;
+  }
+  
+  .btn-close {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .prompt-form {
+    padding: var(--mobile-spacing-lg);
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--mobile-spacing-md);
+  }
+  
+  .form-group {
+    margin-bottom: var(--mobile-spacing-md);
+  }
+  
+  .form-label {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .form-textarea.content {
+    min-height: 150px;
+    font-size: 1rem;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: var(--mobile-spacing-sm);
+    margin-top: var(--mobile-spacing-lg);
+    padding-top: var(--mobile-spacing-lg);
+  }
+  
+  .btn {
+    width: 100%;
+    min-height: var(--touch-target-lg);
+    font-size: 1rem;
+  }
+  
+  .template-buttons {
+    flex-direction: column;
+    gap: var(--mobile-spacing-sm);
+  }
+  
+  .btn-template {
+    width: 100%;
+    min-height: var(--touch-target-sm);
+    font-size: 0.9rem;
+  }
+  
+  .tags-list {
+    padding: var(--mobile-spacing-sm);
+    min-height: var(--touch-target-min);
+  }
+  
+  .tag-input {
+    font-size: 1rem;
+    min-height: var(--touch-target-sm);
+  }
+}
+
+@media (max-width: 375px) {
+  .modal-overlay {
+    padding: var(--mobile-spacing-xs);
+    padding-top: var(--mobile-spacing-sm);
+  }
+  
+  .modal-content {
+    max-height: calc(100vh - var(--mobile-spacing-md));
+  }
+  
+  .modal-header {
+    padding: var(--mobile-spacing-sm) var(--mobile-spacing-md);
+  }
+  
+  .prompt-form {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .form-textarea.content {
+    min-height: 120px;
+  }
+}
+
+@media (min-width: 415px) and (max-width: 768px) {
+  .modal-overlay {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--mobile-spacing-md);
+  }
+  
+  .btn {
+    min-height: var(--touch-target-sm);
   }
 }
 

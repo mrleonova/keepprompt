@@ -45,7 +45,20 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   
+  /* Mobile spacing overrides */
+  --mobile-spacing-xs: 0.375rem;
+  --mobile-spacing-sm: 0.75rem;
+  --mobile-spacing-md: 1.25rem;
+  --mobile-spacing-lg: 2rem;
+  
+  /* Touch targets */
+  --touch-target-xs: 36px;
+  --touch-target-min: 44px;
+  --touch-target-sm: 40px;
+  --touch-target-lg: 48px;
+  
   /* Border radius */
+  --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -60,6 +73,13 @@
   --transition-fast: 0.15s ease;
   --transition-normal: 0.2s ease;
   --transition-slow: 0.3s ease;
+  
+  /* Breakpoints (for JS usage) */
+  --bp-mobile-sm: 320px;
+  --bp-mobile-md: 375px;
+  --bp-mobile-lg: 414px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
 }
 
 /* Dark theme colors */
@@ -168,16 +188,19 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.75rem; }
-h4 { font-size: 1.5rem; }
-h5 { font-size: 1.25rem; }
-h6 { font-size: 1rem; }
+/* Fluid typography for better mobile scaling */
+h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+h4 { font-size: clamp(1.125rem, 2.5vw, 1.5rem); }
+h5 { font-size: clamp(1rem, 2vw, 1.25rem); }
+h6 { font-size: clamp(0.875rem, 1.5vw, 1rem); }
 
 p {
   margin: 0 0 1rem 0;
   color: var(--text-primary);
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  line-height: 1.6;
 }
 
 a {
@@ -300,20 +323,58 @@ a:hover {
 .gap-8 { gap: 2rem; }
 
 /* Responsive utilities */
-@media (max-width: 768px) {
+@media (max-width: 320px) {
   .container {
-    padding: 0 0.75rem;
+    padding: 0 var(--mobile-spacing-xs);
   }
   
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.75rem; }
-  h3 { font-size: 1.5rem; }
+  h1 { font-size: clamp(1.25rem, 6vw, 1.75rem); }
+  h2 { font-size: clamp(1.125rem, 5vw, 1.5rem); }
+  h3 { font-size: clamp(1rem, 4vw, 1.25rem); }
   
   .toast {
-    top: 0.5rem;
-    right: 0.5rem;
-    left: 0.5rem;
+    top: var(--mobile-spacing-xs);
+    right: var(--mobile-spacing-xs);
+    left: var(--mobile-spacing-xs);
     max-width: none;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 414px) {
+  .container {
+    padding: 0 var(--mobile-spacing-sm);
+  }
+  
+  h1 { font-size: clamp(1.5rem, 5vw, 2rem); }
+  h2 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
+  h3 { font-size: clamp(1.125rem, 3.5vw, 1.5rem); }
+  
+  .toast {
+    top: var(--mobile-spacing-sm);
+    right: var(--mobile-spacing-sm);
+    left: var(--mobile-spacing-sm);
+    max-width: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--mobile-spacing-sm);
+  }
+  
+  .toast {
+    top: var(--mobile-spacing-sm);
+    right: var(--mobile-spacing-sm);
+    left: var(--mobile-spacing-sm);
+    max-width: none;
+  }
+}
+
+/* Large mobile and tablet adjustments */
+@media (min-width: 415px) and (max-width: 768px) {
+  .container {
+    padding: 0 var(--mobile-spacing-md);
   }
 }
 

@@ -33,8 +33,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
-  gap: 0.75rem;
+  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-sm);
 }
 
 .card-title-section {
@@ -70,19 +70,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  min-width: var(--touch-target-sm);
+  min-height: var(--touch-target-sm);
   border: none;
   background: transparent;
   color: var(--text-tertiary);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
+  /* Better touch target */
+  position: relative;
+}
+
+.btn-action:after {
+  content: '';
+  position: absolute;
+  inset: -4px; /* Expand touch area */
+  z-index: -1;
 }
 
 .btn-action:hover {
   background: var(--bg-tertiary);
   color: var(--text-secondary);
+}
+
+.btn-action:active {
+  background: var(--primary-color-light);
+  color: var(--primary-color);
+  transform: scale(0.95);
 }
 
 .btn-action.favorited {
@@ -188,14 +203,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  min-width: var(--touch-target-sm);
+  min-height: var(--touch-target-sm);
   border: 1px solid var(--border-color);
   background: var(--bg-primary);
   color: var(--text-secondary);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
+  /* Better touch feedback */
+  position: relative;
+}
+
+.btn-copy:after {
+  content: '';
+  position: absolute;
+  inset: -4px; /* Expand touch area */
+  z-index: -1;
 }
 
 .btn-copy:hover {
@@ -205,7 +229,27 @@
   transform: scale(1.05);
 }
 
-/* Focus styles for accessibility */
+.btn-copy:active {
+  transform: scale(0.95);
+}
+
+/* Better touch feedback for cards */
+.prompt-card:active {
+  transform: translateY(1px) scale(0.99);
+  transition: transform 0.1s ease;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  /* Touch-specific styles for mobile devices */
+  .prompt-card:active {
+    background: var(--bg-tertiary);
+  }
+  
+  .btn-action:active,
+  .btn-copy:active {
+    opacity: 0.7;
+  }
+}
 .prompt-card:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
@@ -217,34 +261,119 @@
   outline-offset: 1px;
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
+/* Mobile responsive improvements */
+@media (max-width: 320px) {
   .prompt-card {
-    padding: 1rem;
+    padding: var(--mobile-spacing-sm);
+    margin-bottom: var(--mobile-spacing-sm);
   }
   
   .card-header {
-    gap: 0.5rem;
+    gap: var(--mobile-spacing-xs);
+    margin-bottom: var(--mobile-spacing-xs);
+  }
+  
+  .card-title {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  
+  .btn-action {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .btn-copy {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .card-content {
+    padding: var(--mobile-spacing-sm);
+    margin-bottom: var(--mobile-spacing-sm);
+  }
+  
+  .card-content p {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  
+  .card-actions {
+    gap: var(--spacing-xs);
+  }
+}
+
+@media (max-width: 414px) {
+  .prompt-card {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .card-header {
+    gap: var(--mobile-spacing-sm);
   }
   
   .card-title {
     font-size: 1rem;
+    line-height: 1.4;
   }
   
   .btn-action {
-    width: 28px;
-    height: 28px;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .btn-copy {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
   }
   
   .card-meta {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: var(--mobile-spacing-sm);
   }
   
   .card-stats {
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: var(--mobile-spacing-sm);
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .card-content {
+    padding: var(--mobile-spacing-md);
+    margin-bottom: var(--mobile-spacing-md);
+  }
+  
+  .card-content p {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 375px) {
+  .prompt-card {
+    padding: var(--mobile-spacing-sm);
+  }
+  
+  .card-content {
+    padding: var(--mobile-spacing-sm);
+  }
+  
+  .card-actions {
+    gap: var(--spacing-xs);
+  }
+}
+
+@media (min-width: 415px) and (max-width: 768px) {
+  .prompt-card {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .btn-action,
+  .btn-copy {
+    min-width: var(--touch-target-sm);
+    min-height: var(--touch-target-sm);
   }
 }
 
