@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, SortAsc, SortDesc, Grid, List } from 'lucide-react';
+import { SortAsc, SortDesc } from 'lucide-react';
 import PromptCard from './PromptCard';
 import './PromptList.css';
 
